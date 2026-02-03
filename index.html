@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Happy Birthday Aislynn</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link href="https://fonts.googleapis.com/css2?family=Allura&display=swap" rel="stylesheet">
+
+<style>
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Georgia, serif;
+  background: #f4f1ec;
+}
+
+.stage {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* CARD */
+.card {
+  width: 320px;
+  height: 460px;
+  perspective: 1200px;
+  position: relative;
+}
+
+.inner {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 1.2s ease-in-out;
+}
+
+.card.open .inner {
+  transform: rotateY(-180deg);
+}
+
+.front, .inside {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  overflow: hidden;
+}
+
+/* COVER */
+.front {
+  background: url("Cover.png") center/cover no-repeat;
+  position: relative;
+}
+
+/* BUTTON */
+.open-btn {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 6px 16px;
+  font-size: 13px;
+  background: rgba(255,255,255,0.85);
+  border-radius: 16px;
+  border: none;
+  cursor: pointer;
+  z-index: 4;
+}
+
+/* =========================
+   ENVELOPE (FRONT ANIMATION)
+   ========================= */
+
+.envelope-wrap{
+  position:absolute;
+  left:50%;
+  bottom:60px;
+  transform:translateX(-50%);
+  width:120px;
+  height:80px;
+  z-index:3;
+  filter: drop-shadow(0 8px 14px rgba(0,0,0,.25));
+}
+
+.envelope{
+  position:relative;
+  width:100%;
+  height:100%;
+}
+
+.env-back{
+  position:absolute;
+  inset:0;
+  background:#f8f0e6;
+  border:2px solid rgba(0,0,0,.12);
+  border-radius:10px;
+}
+
+.env-front{
+  position:absolute;
+  inset:0;
+  background:#f1e4d6;
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  border-radius:10px;
+  border:2px solid rgba(0,0,0,.12);
+}
+
+.env-front:before{
+  content:"";
+  position:absolute;
+  left:0; right:0; top:0; bottom:0;
+  clip-path: polygon(0 0, 50% 55%, 100% 0, 100% 100%, 0 100%);
+  background:rgba(255,255,255,.25);
+  border-radius:10px;
+}
+
+.env-flap{
+  position:absolute;
+  left:0; right:0;
+  top:-2px;
+  height:55%;
+  background:#efe1d1;
+  border:2px solid rgba(0,0,0,.12);
+  border-bottom:none;
+  border-radius:10px 10px 0 0;
+  clip-path: polygon(0 0, 50% 100%, 100% 0);
+  transform-origin: 50% 0%;
+  transform: rotateX(0deg);
+  transition: transform 900ms ease;
+}
+
+.letter{
+  position:absolute;
+  left:10px;
+  right:10px;
+  bottom:10px;
+  height:60px;
+  background:white;
+  border-radius:8px;
+  border:1px solid rgba(0,0,0,.12);
+  transform: translateY(18px);
+  transition: transform 900ms ease;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family: 'Allura', cursive;
+  font-size:22px;
+  color:#2b2b2b;
+}
+
+/* When card opens, envelope opens and letter lifts */
+.card.open .env-flap{
+  transform: rotateX(170deg);
+}
+.card.open .letter{
+  transform: translateY(-12px);
+}
+
+/* INSIDE */
+.inside {
+  background: #fdf7eb;
+  transform: rotateY(180deg);
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: 'Allura', cursive;
+  color: #2b2b2b;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* Text layout */
+.message{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  text-align:center;
+}
+
+.message .dear{
+  font-size:30px;
+  margin:0;
+}
+
+.message .line{
+  font-size:22px;
+  line-height:1.1;
+  margin:0;
+}
+
+.signature{
+  font-size:26px;
+  margin-top:6px;
+}
+
+/* =========================
+   CANDLE + FLICKER (INSIDE)
+   ========================= */
+
+.candle-row{
+  display:flex;
+  justify-content:center;
+  margin: 2px 0 6px 0;
+}
+
+.candle{
+  position:relative;
+  width:42px;
+  height:70px;
+}
+
+.candle-body{
+  position:absolute;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:30px;
+  height:52px;
+  border-radius:10px;
+  background: linear-gradient(#fff6e6, #f1d6b8);
+  box-shadow: inset 0 0 0 2px rgba(0,0,0,.08);
+}
+
+.wick{
+  position:absolute;
+  left:50%;
+  bottom:50px;
+  transform:translateX(-50%);
+  width:2px;
+  height:8px;
+  background:#3a2b1f;
+  border-radius:2px;
+}
+
+.flame{
+  position:absolute;
+  left:50%;
+  bottom:56px;
+  transform:translateX(-50%);
+  width:16px;
+  height:22px;
+  background: radial-gradient(circle at 50% 30%, #fff 0 18%, #ffe27a 18% 45%, #ff9d3a 45% 70%, #ff5a1f 70% 100%);
+  border-radius: 50% 50% 50% 50%;
+  filter: drop-shadow(0 0 10px rgba(255,170,60,.8));
+  transform-origin: 50% 80%;
+  animation: flicker 0.12s infinite alternate;
+}
+
+@keyframes flicker{
+  0% { transform: translateX(-50%) scale(1) rotate(-2deg); opacity:.95; }
+  100%{ transform: translateX(-50%) scale(1.05) rotate(2deg); opacity:1; }
+}
+
+/* CORGIS */
+.corgis{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+  margin-top:4px;
+}
+
+.wag{
+  animation: wag 1s infinite ease-in-out;
+  transform-origin: center bottom;
+}
+
+@keyframes wag{
+  0%{ transform: rotate(-4deg); }
+  50%{ transform: rotate(4deg); }
+  100%{ transform: rotate(-4deg); }
+}
+
+/* Paw confetti */
+.paw{
+  position:absolute;
+  font-size:14px;
+  opacity:0;
+  animation: fall 1.8s linear forwards;
+}
+
+@keyframes fall{
+  0%{ opacity:1; transform:translateY(-10px);}
+  100%{ opacity:0; transform:translateY(350px);}
+}
+</style>
+</head>
+
+<body>
+<div class="stage">
+
+  <!-- Background Music -->
+  <audio id="music" loop preload="auto">
+    <source src="birthday.mp3" type="audio/mpeg">
+  </audio>
+
+  <div class="card" id="card" onclick="toggleCard()">
+    <div class="inner">
+
+      <!-- FRONT -->
+      <div class="front">
+        <!-- Envelope animation -->
+        <div class="envelope-wrap" aria-hidden="true">
+          <div class="envelope">
+            <div class="env-back"></div>
+            <div class="letter">For Aislynn</div>
+            <div class="env-front"></div>
+            <div class="env-flap"></div>
+          </div>
+        </div>
+
+        <button class="open-btn" onclick="toggleCard(event)">Open</button>
+      </div>
+
+      <!-- INSIDE -->
+      <div class="inside">
+
+        <div class="message">
+          <p class="dear">Dear Aislynn,</p>
+
+          <!-- candle -->
+          <div class="candle-row" aria-hidden="true">
+            <div class="candle">
+              <div class="flame"></div>
+              <div class="wick"></div>
+              <div class="candle-body"></div>
+            </div>
+          </div>
+
+          <p class="line">Happy Birthday! #24</p>
+          <p class="line">You are so very special! I'm praying this year brings you great joy. God has amazing plans to prosper you!
+
+          <p class="signature">Love,<br>Dad</p>
+        </div>
+
+        <!-- Corgis -->
+        <div class="corgis" aria-hidden="true">
+
+          <!-- Left corgi -->
+          <svg class="wag" width="70" viewBox="0 0 120 80">
+            <rect x="20" y="35" width="80" height="30" rx="14" fill="#f4a460"/>
+            <circle cx="30" cy="40" r="14" fill="#f4a460"/>
+            <circle cx="26" cy="38" r="3" fill="#000"/>
+            <polygon points="18,25 30,15 38,30" fill="#f4a460"/>
+            <polygon points="42,25 54,15 58,30" fill="#f4a460"/>
+            <circle cx="95" cy="48" r="5" fill="#fff"/>
+          </svg>
+
+          <!-- Right corgi -->
+          <svg class="wag" width="70" viewBox="0 0 120 80">
+            <rect x="20" y="35" width="80" height="30" rx="14" fill="#e9967a"/>
+            <circle cx="90" cy="40" r="14" fill="#e9967a"/>
+            <circle cx="94" cy="38" r="3" fill="#000"/>
+            <polygon points="80,25 92,15 98,30" fill="#e9967a"/>
+            <polygon points="100,25 112,15 114,30" fill="#e9967a"/>
+            <circle cx="25" cy="48" r="5" fill="#fff"/>
+          </svg>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+function toggleCard(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const card = document.getElementById('card');
+  const opening = !card.classList.contains('open');
+  card.classList.toggle('open');
+
+  const music = document.getElementById('music');
+  if (music && music.paused) {
+    music.volume = 0.35;
+    music.play().catch(() => {});
+  }
+
+  // paw confetti only on open
+  if(opening){
+    for(let i=0;i<10;i++){
+      const paw=document.createElement("div");
+      paw.className="paw";
+      paw.textContent="🐾";
+      paw.style.left=(20 + Math.random()*280) + "px";
+      paw.style.top="40px";
+      document.body.appendChild(paw);
+      setTimeout(()=>paw.remove(),2000);
+    }
+  }
+}
+</script>
+
+</body>
+</html>
